@@ -1,1 +1,29 @@
 
+name: samba
+base: core20
+version: git
+summary: Samba in a snap
+description: |
+  Attempt to port samba in a snap.
+grade: edge
+confinement: devmode
+
+parts:
+    samba:
+        plugin: dump
+        source: https://github.com/samba-team/samba.git
+        source-type: git
+        source-branch: v4-12-stable
+        override-build: |
+        bootstrap/generated-dists/ubuntu2004/bootstrap.sh
+        ./configure
+        make
+        make install
+
+apps:
+    smbd:
+        command: smbd
+    smbpasswd:
+        command: smbpasswd
+    pdbedit:
+        command: pdbedit
