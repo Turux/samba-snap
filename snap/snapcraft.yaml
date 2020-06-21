@@ -5,7 +5,7 @@ version: git
 summary: Samba in a snap
 description: |
   Attempt to port samba in a snap.
-grade: edge
+grade: devel
 confinement: devmode
 
 parts:
@@ -15,10 +15,10 @@ parts:
         source-type: git
         source-branch: v4-12-stable
         override-build: |
-        bootstrap/generated-dists/ubuntu2004/bootstrap.sh
-        ./configure
-        make
-        make install
+            bootstrap/generated-dists/ubuntu2004/bootstrap.sh
+            ./configure
+            make
+            make install
 
 apps:
     smbd:
