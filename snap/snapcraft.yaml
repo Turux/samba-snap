@@ -1,29 +1,131 @@
-
-name: samba
-base: core20
-version: git
-summary: Samba in a snap
+name: samba # you probably want to 'snapcraft register <name>'
+version: 'git' # just for humans, typically '1.2+git' or '1.3.2'
+summary: Samba in a snap # 79 char long summary
 description: |
   Attempt to port samba in a snap.
-grade: devel
-confinement: devmode
-
-parts:
-    samba:
-        plugin: dump
-        source: https://github.com/samba-team/samba.git
-        source-type: git
-        source-branch: v4-12-stable
-        override-build: |
-            bootstrap/generated-dists/ubuntu2004/bootstrap.sh
-            ./configure
-            make
-            make install
-
+confinement: devmode # use 'strict' once you have the right plugs and slots
+base: core18
+   
 apps:
     smbd:
-        command: smbd
+      command: smbd
+      plugs: 
+        - network
+        - network-bind
     smbpasswd:
-        command: smbpasswd
+      command: smbpasswd
     pdbedit:
-        command: pdbedit
+      command: pdbedit
+
+parts:
+  samba:
+    plugin: make
+    source: https://github.com/samba-team/samba.git
+    source-type: git
+    source-branch: v4-12-stable
+    override-pull: |
+      snapcraftctl 
+      apt update
+    override-build: |
+      apt-get update
+      CONFIGFLAGS="--prefix=/usr --exec-prefix=/usr --sysconfdir=/etc \
+      --localstatedir=/var --libdir=/usr/lib/$SNAP_ARCH \
+      --with-privatedir=/var/lib/samba/private \
+      --with-smbpasswd-file=/etc/samba/smbpasswd \
+      --enable-fhs --enable-spotlight --with-systemd
+      ./configure $CONFIGFLAGS
+      snapcraftctl build
+    build-packages:
+      - acl
+      - apt-utils 
+      - attr 
+      - autoconf 
+      - bind9utils 
+      - binutils 
+      - bison 
+      - build-essential 
+      - ccache 
+      - chrpath 
+      - curl 
+      - debhelper 
+      - dnsutils 
+      - docbook-xml 
+      - docbook-xsl 
+      - flex 
+      - gcc 
+      - gdb 
+      - git 
+      - glusterfs-common 
+      - gzip 
+      - heimdal-multidev 
+      - hostname 
+      - htop 
+      - krb5-config
+      - krb5-kdc
+      - krb5-user
+      - language-pack-en
+      - lcov
+      - libacl1-dev
+      - libarchive-dev
+      - libattr1-dev
+      - libavahi-common-dev
+      - libblkid-dev 
+      - libbsd-dev 
+      - libcap-dev 
+      - libcephfs-dev 
+      - libcups2-dev 
+      - libdbus-1-dev 
+      - libglib2.0-dev 
+      - libgnutls28-dev 
+      - libgpgme11-dev 
+      - libicu-dev 
+      - libjansson-dev 
+      - libjs-jquery 
+      - libjson-perl 
+      - libkrb5-dev 
+      - libldap2-dev 
+      - liblmdb-dev 
+      - libncurses5-dev 
+      - libpam0g-dev 
+      - libparse-yapp-perl 
+      - libpcap-dev 
+      - libpopt-dev 
+      - libreadline-dev 
+      - libsystemd-dev 
+      - libtasn1-bin 
+      - libtasn1-dev 
+      - libunwind-dev 
+      - lmdb-utils 
+      - locales 
+      - lsb-release 
+      - make 
+      - mawk 
+      - mingw-w64 
+      - patch 
+      - perl 
+      - perl-modules 
+      - pkg-config 
+      - procps 
+      - psmisc 
+      - python3 
+      - python3-cryptography
+      - python3-dbg
+      - python3-dev
+      - python3-dnspython
+      - python3-gpg
+      - python3-iso8601
+      - python3-markdown
+      - python3-matplotlib
+      - python3-pexpect
+      - python3-pyasn1
+      - rng-tools
+      - rsync
+      - sed
+      - sudo
+      - tar
+      - tree
+      - uuid-dev
+      - wget
+      - xfslibs-dev
+      - xsltproc
+      - zlib1g-dev
