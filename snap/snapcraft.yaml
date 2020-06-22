@@ -7,11 +7,17 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 base: core18
    
 apps:
+    samba:
+        command: samba
     smbd:
       command: smbd
+      daemon: simple
       plugs: 
         - network
         - network-bind
+    nmbd:
+        command: nmbd
+        deamon: simple
     smbpasswd:
       command: smbpasswd
     pdbedit:
