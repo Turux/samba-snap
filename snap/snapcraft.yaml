@@ -21,8 +21,14 @@ parts:
             make install
 
 apps:
+    samba:
+        command: samba
     smbd:
         command: smbd
+        daemon: simple
+    nmbd:
+        command: nmbd
+        deamon: simple
     smbpasswd:
         command: smbpasswd
     pdbedit:
